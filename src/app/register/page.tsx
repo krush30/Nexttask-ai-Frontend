@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Particles } from "../ui/Particles";
 
@@ -19,6 +19,10 @@ const RegisterPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  type JwtPayload = {
+    userId: string;
+    [key: string]: unknown;
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -28,16 +32,17 @@ const RegisterPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         form
       );
-      const token = res.data.token;
+      const token: string = res.data.token;
 
       localStorage.setItem("token", token);
-      const decoded: any = jwtDecode(token);
+      const decoded = jwtDecode<JwtPayload>(token); // ✅ Typed decode
 
       console.log("✅ Registered as", decoded.userId);
       router.push("/dashboard");
-    } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.error || "Registration failed");
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>; // ✅ Typed error
+      console.error(error);
+      setError(error.response?.data?.error || "Registration failed");
     }
   };
 

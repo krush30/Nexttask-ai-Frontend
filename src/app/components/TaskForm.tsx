@@ -32,9 +32,13 @@ const TaskForm = ({ onTasksGenerated }: TaskFormProps) => {
 
       onTasksGenerated(res.data.tasks);
       setTopic("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.response?.data?.error || "Failed to generate tasks");
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error || "Failed to generate tasks");
+      } else {
+        setError("Failed to generate tasks");
+      }
     } finally {
       setLoading(false);
     }
@@ -46,7 +50,7 @@ const TaskForm = ({ onTasksGenerated }: TaskFormProps) => {
       className="mb-8 p-6 bg-[#030412] border border-white/10 rounded-2xl shadow-md"
     >
       <label className="block mb-3 text-sm font-medium text-white tracking-wide">
-        🤖 What's your goal today?
+        🤖 What&#39;s your goal today?
       </label>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">

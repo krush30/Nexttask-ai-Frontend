@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
-import { Task } from "@/types/task"; // adjust path if needed
+import { Task } from "@/types/task";
 import Hero from "../HeroFIles/Hero";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
@@ -14,6 +13,8 @@ const DashboardPage = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  console.log(loading, error);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Particles } from "../ui/Particles";
 
@@ -30,13 +30,15 @@ const LoginPage = () => {
       const token = res.data.token;
 
       localStorage.setItem("token", token);
-      const decoded: any = jwtDecode(token);
+      type JwtPayload = { userId: string; [key: string]: unknown };
+      const decoded = jwtDecode<JwtPayload>(token);
 
       console.log("✅ Logged in as", decoded.userId);
       router.push("/dashboard");
-    } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.error || "Login failed");
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>;
+      console.error(error);
+      setError(error.response?.data?.error || "Login failed");
     }
   };
 
