@@ -76,7 +76,7 @@ const TaskItem = ({ task, onUpdate, onDelete }: Props) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border border-white/10 rounded-2xl bg-[#030412] shadow-sm">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 p-4 border border-white/10 rounded-2xl bg-[#030412] shadow-sm">
       {/* Task Title and Status */}
       <div className="flex flex-col gap-2 w-full max-w-md">
         {isEditing ? (
@@ -108,7 +108,7 @@ const TaskItem = ({ task, onUpdate, onDelete }: Props) => {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3 items-center">
+      <div className="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-3 items-center w-full sm:w-auto">
         {isEditing ? (
           <button
             onClick={handleEdit}
